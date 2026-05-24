@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股市场全景监测 | {{DATE}}</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #666;
+  --border: #e8e8e8;
+  --blue: #4361ee;
+  --red: #e63946;
+  --green: #2ec4b6;
+  --orange: #f77f00;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px;
+}
+.header {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #4361ee, #3a0ca3);
+  color: white;
+  border-radius: 12px;
+}
+.header h1 { font-size: 24px; margin-bottom: 4px; }
+.header .subtitle { font-size: 13px; opacity: 0.8; }
+.header .date { font-size: 14px; margin-top: 8px; float: right; opacity: 0.9; }
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.card h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.card .desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.chart-box { width: 100%; height: 400px; }
+.footer {
+  max-width: 1200px;
+  margin: 20px auto 0;
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.footer a { color: var(--blue); text-decoration: none; }
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 12px;
+}
+table.data-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: #f0f2f5;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+table.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.up { color: var(--red); }
+.down { color: var(--green); }
+.neutral { color: var(--blue); }
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-hot { background: #fee; color: var(--red); }
+.tag-cold { background: #e8f8f5; color: var(--green); }
+.tag-mid { background: #eef0ff; color: var(--blue); }
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge-ovb { background: #e63946; color: white; }
+.badge-ovs { background: #2ec4b6; color: white; }
+.badge-mid { background: #eef0ff; color: #4361ee; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 A股市场全景监测</h1>
+  <div class="subtitle">EarlETF 图表范式复刻 · 每周更新</div>
+  <div class="date">更新于 {{DATE}}</div>
+</div>
+
+<div class="grid">
+
+<!-- ====== 1. 五年之锚 ====== -->
+<div class="card">
+  <h2>🪝 Wind全A 五年之锚</h2>
+  <div class="desc">中证A股全收益指数 &amp; 5年均线(MA1250) &amp; ±15%区间。当指数超过五年均线+15%可暂停定投，低于-15%可加码。数据源：{{INDEX_SOURCE}}</div>
+  <div id="chart_anchor" class="chart-box"></div>
+</div>
+
+<!-- ====== 2. 中美股债性价比 ====== -->
+<div class="card">
+  <h2>🌍 中美视角下的A股股债性价比</h2>
+  <div class="desc">沪深300 PE倒数(EP) - 中美10年期国债收益率，数值越高股票越具性价比。同时显示市赚率(PR=PE/ROE/ROE*100)。红色线=美元视角，蓝色线=人民币视角。数据源：{{PE_SOURCE}} / FRED</div>
+  <div id="chart_equity_bond" class="chart-box"></div>
+</div>
+
+<!-- ====== 3. 中证红利股息率 ====== -->
+<div class="card">
+  <h2>💰 中证红利股息率追踪</h2>
+  <div class="desc">中证红利指数历史股息率走势（蓝线），叠加股息率-10年国债利差（橙线）。利差越高红利相对债券越有吸引力。数据源：{{DIVIDEND_SOURCE}} / FRED</div>
+  <div id="chart_dividend" class="chart-box"></div>
+</div>
+
+<!-- ====== 4. 风格轮动三棱镜 ====== -->
+<div class="card">
+  <h2>🔮 沪深300 价值 vs 成长 轮动三棱镜</h2>
+  <div class="desc">300价值稳健 / 300成长创新比值 + 252日均线布林带 + 40日收益差MA。当比值突破布林带上轨或40日收益差转正，风格切换可能开始。数据源：{{STYLE_SOURCE}}</div>
+  <div id="chart_style" class="chart-box"></div>
+</div>
+
+<!-- ====== 5. 偏股基金情绪测温 ====== -->
+<div class="card">
+  <h2>🌡️ 偏股基金3年滚动年化收益</h2>
+  <div class="desc">中证偏股基金指数3年滚动年化收益。&gt;30%提示泡沫风险，&lt;-10%提示底部机会。灰色阴影区为前两轮熊市底部区域。数据源：{{FUND_SOURCE}}</div>
+  <div id="chart_fund" class="chart-box"></div>
+</div>
+
+<!-- ====== 关键数据速览 ====== -->
+<div class="card">
+  <h2>📋 关键数据速览</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>指标</th><th>最新值</th><th>前周</th><th>变动</th><th>信号</th></tr>
+    </thead>
+    <tbody id="key_metrics">
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<div class="footer">
+  基于 TDX / 东方财富妙想 / FRED 数据 | 
+  图表范式参考 <a href="https://mp.weixin.qq.com/s/Cg2T9_SxLoJFPQPmsNUfHw" target="_blank">EarlETF图表周刊</a> |
+  由 OpenClaw 每周自动生成 | 
+  <a href="https://github.com/raistlin1314-byte" target="_blank">GitHub</a>
+</div>
+
+<script>
+// ===== DATA INJECTED BY GENERATOR =====
+const REPORT_DATA = {{DATA_JSON}};
+// =======================================
+
+const COLORS = { blue: '#4361ee', red: '#e63946', green: '#2ec4b6', orange: '#f77f00', purple: '#7209b7', gray: '#adb5bd' };
+
+function fmtPct(v) {
+  if (v == null) return '-';
+  return (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+}
+
+// ---- 1. 五年之锚 ----
+function renderAnchor(id) {
+  const chart = echarts.init(document.getElementById(id));
+  const d = REPORT_DATA.anchor;
+  if (!d || !d.dates || d.dates.length === 0) {
+    chart.setOption({ title: { text: '数据加载中...', left: 'center', top: 'center' } });
+    return;
+  }
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: [d.idxName, '5年均线', '+15%上轨', '-15%下轨'], bottom: 0 },
+    grid: { left: 60, right: 20, bottom: 50, top: 20 },
+    xAxis: { type: 'category', data: d.dates, axisLabel: { fontSize: 10 } },
+    yAxis: { type: 'value', scale: true, axisLabel: { formatter: v => v.toFixed(0) } },
+    dataZoom: [{ type: 'inside' }, { type: 'slider', bottom: 20, height: 20 }],
+    series: [
+      { name: d.idxName, type: 'line', data: d.index, smooth: true, lineStyle: { width: 2, color: COLORS.blue },
+        areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [{ offset: 0, color: 'rgba(67,97,238,0.15)' }, { offset: 1, color: 'rgba(67,97,238,0)' }] }}},
+      { name: '5年均线', type: 'line', data: d.ma1250, smooth: true, lineStyle: { width: 1.5, type: 'dashed', color: COLORS.orange }},
+      { name: '+15%上轨', type: 'line', data: d.upper, smooth: true, lineStyle: { width: 1, type: 'dotted', color: COLORS.red }},
+      { name: '-15%下轨', type: 'line', data: d.lower, smooth: true, lineStyle: { width: 1, type: 'dotted', color: COLORS.green }},
+    ]
+  };
+  chart.setOption(option);
+}
+
+// ---- 2. 股债性价比 ----
+function renderEquityBond(id) {
+  const chart = echarts.init(document.getElementById(id));
+  const d = REPORT_DATA.equityBond;
+  if (!d || !d.dates || d.dates.length === 0) {
+    chart.setOption({ title: { text: '数据加载中...', left: 'center', top: 'center' } });
+    return;
+  }
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['中国EP-中债', '中国EP-美债', '市赚率(右轴)'], bottom: 0 },
+    grid: [{ left: 55, right: 55, bottom: 50, top: 20 }],
+    xAxis: { type: 'category', data: d.dates, axisLabel: { fontSize: 10 }, gridIndex: 0 },
+    yAxis: [
+      { type: 'value', scale: true, axisLabel: { formatter: '{value}%' }, gridIndex: 0 },
+      { type: 'value', scale: true, min: 0, max: 100, axisLabel: { formatter: '{value}' }, gridIndex: 0 }
+    ],
+    series: [
+      { name: '中国EP-中债', type: 'line', data: d.cnSpread, smooth: true, lineStyle: { width: 2, color: COLORS.blue },
+        areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [{ offset: 0, color: 'rgba(67,97,238,0.12)' }, { offset: 1, color: 'rgba(67,97,238,0)' }] }}},
+      { name: '中国EP-美债', type: 'line', data: d.usSpread, smooth: true, lineStyle: { width: 2, color: COLORS.red }},
+      { name: '市赚率(右轴)', type: 'line', data: d.pr, smooth: true, yAxisIndex: 1, lineStyle: { width: 1.5, color: COLORS.orange, type: 'dashed' }},
+    ]
+  };
+  chart.setOption(option);
+}
+
+// ---- 3. 中证红利股息率 ----
+function renderDividend(id) {
+  const chart = echarts.init(document.getElementById(id));
+  const d = REPORT_DATA.dividend;
+  if (!d || !d.dates || d.dates.length === 0) {
+    chart.setOption({ title: { text: '数据加载中...', left: 'center', top: 'center' } });
+    return;
+  }
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['股息率', '股息率-10Y国债利差'], bottom: 0 },
+    grid: { left: 55, right: 20, bottom: 50, top: 20 },
+    xAxis: { type: 'category', data: d.dates, axisLabel: { fontSize: 10 } },
+    yAxis: { type: 'value', scale: true, axisLabel: { formatter: '{value}%' } },
+    series: [
+      { name: '股息率', type: 'line', data: d.divYield, smooth: true, lineStyle: { width: 2, color: COLORS.blue },
+        areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [{ offset: 0, color: 'rgba(67,97,238,0.12)' }, { offset: 1, color: 'rgba(67,97,238,0)' }] }}},
+      { name: '股息率-10Y国债利差', type: 'line', data: d.spread, smooth: true, lineStyle: { width: 2, color: COLORS.orange }},
+    ]
+  };
+  chart.setOption(option);
+}
+
+// ---- 4. 风格轮动三棱镜 ----
+function renderStyle(id) {
+  const chart = echarts.init(document.getElementById(id));
+  const d = REPORT_DATA.style;
+  if (!d || !d.dates || d.dates.length === 0) {
+    chart.setOption({ title: { text: '数据加载中...', left: 'center', top: 'center' } });
+    return;
+  }
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['价值/成长比值', '252日均线', '上轨', '下轨', '40日收益差(右轴)'], bottom: 0 },
+    grid: [{ left: 55, right: 55, bottom: 50, top: 20 }],
+    xAxis: { type: 'category', data: d.dates, axisLabel: { fontSize: 10 }, gridIndex: 0 },
+    yAxis: [
+      { type: 'value', scale: true, name: '比值', gridIndex: 0 },
+      { type: 'value', scale: true, name: '%', gridIndex: 0 }
+    ],
+    series: [
+      { name: '价值/成长比值', type: 'line', data: d.ratio, smooth: true, lineStyle: { width: 2, color: COLORS.blue }},
+      { name: '252日均线', type: 'line', data: d.ma252, smooth: true, lineStyle: { width: 1.5, type: 'dashed', color: COLORS.orange }},
+      { name: '上轨', type: 'line', data: d.upper, smooth: true, lineStyle: { width: 1, type: 'dotted', color: COLORS.gray }},
+      { name: '下轨', type: 'line', data: d.lower, smooth: true, lineStyle: { width: 1, type: 'dotted', color: COLORS.gray }},
+      { name: '40日收益差(右轴)', type: 'bar', data: d.ret40d, yAxisIndex: 1, itemStyle: { 
+        color: (p) => p.value >= 0 ? COLORS.red : COLORS.green
+      }},
+    ]
+  };
+  chart.setOption(option);
+}
+
+// ---- 5. 偏股基金情绪 ----
+function renderFund(id) {
+  const chart = echarts.init(document.getElementById(id));
+  const d = REPORT_DATA.fund;
+  if (!d || !d.dates || d.dates.length === 0) {
+    chart.setOption({ title: { text: '数据加载中...', left: 'center', top: 'center' } });
+    return;
+  }
+  // Mark areas
+  const marks = [];
+  if (d.markZones) {
+    d.markZones.forEach(z => {
+      marks.push({
+        xAxis: { start: z.start, end: z.end },
+        itemStyle: { color: 'rgba(231,76,60,0.08)' }
+      });
+    });
+  }
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' }, formatter: (p) => p[0].axisValue + '<br/>' + p[0].seriesName + ': ' + p[0].value.toFixed(1) + '%' },
+    legend: { data: ['3年滚动年化收益', '30%泡沫线', '-10%底部线'], bottom: 0 },
+    grid: { left: 55, right: 20, bottom: 50, top: 20 },
+    xAxis: { type: 'category', data: d.dates, axisLabel: { fontSize: 10 } },
+    yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    visualMap: { show: false, pieces: [{ min: 30, color: COLORS.red }, { max: -10, color: COLORS.green }] },
+    series: [{
+      name: '3年滚动年化收益', type: 'line', data: d.returns, smooth: true, lineStyle: { width: 2, color: COLORS.blue },
+      areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+        colorStops: [{ offset: 0, color: 'rgba(67,97,238,0.1)' }, { offset: 1, color: 'rgba(67,97,238,0)' }] }},
+      markLine: {
+        data: [
+          { yAxis: 30, label: { formatter: '泡沫线 30%' }, lineStyle: { color: COLORS.red, type: 'dashed', width: 1.5 }},
+          { yAxis: -10, label: { formatter: '底部线 -10%' }, lineStyle: { color: COLORS.green, type: 'dashed', width: 1.5 }},
+          { yAxis: 0, lineStyle: { color: COLORS.gray, type: 'dotted', width: 1 }},
+        ]
+      },
+      markArea: { silent: true, data: marks }
+    }]
+  };
+  chart.setOption(option);
+}
+
+// ---- Key Metrics Table ----
+function renderMetrics() {
+  const tbody = document.getElementById('key_metrics');
+  if (!REPORT_DATA.metrics) return;
+  REPORT_DATA.metrics.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${m.name}</td>
+      <td class="num">${m.value}</td>
+      <td class="num">${m.prev || '-'}</td>
+      <td class="num ${m.change >= 0 ? 'up' : 'down'}">${fmtPct(m.change)}</td>
+      <td><span class="tag ${m.signal === '过热' ? 'tag-hot' : m.signal === '低估' ? 'tag-cold' : 'tag-mid'}">${m.signal || '中性'}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== RENDER ALL =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderAnchor('chart_anchor');
+  renderEquityBond('chart_equity_bond');
+  renderDividend('chart_dividend');
+  renderStyle('chart_style');
+  renderFund('chart_fund');
+  renderMetrics();
+
+  // Handle resize
+  window.addEventListener('resize', () => {
+    ['chart_anchor','chart_equity_bond','chart_dividend','chart_style','chart_fund'].forEach(id => {
+      const c = echarts.getInstanceByDom(document.getElementById(id));
+      if (c) c.resize();
+    });
+  });
+});
+</script>
+</body>
+</html>
