@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A股市场全景监测 - 2026-07-14</title>
+<title>A股市场全景监测 - 2026-07-19</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1923;color:#ddd;line-height:1.6;padding:20px}
@@ -18,8 +18,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e2d3d}
 .stat-label{color:#7f8c8d}
 .stat-value{font-weight:bold;color:#ecf0f1}
-.stat-value.up{color:#e74c3c}
-.stat-value.down{color:#27ae60}
 .signal-card{background:linear-gradient(135deg,#1a2733,#1e2d3d);border-left:4px solid #3498db}
 .signal-card.warn{border-left-color:#e67e22}
 .signal-card.danger{border-left-color:#e74c3c}
@@ -30,13 +28,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag-neutral{background:rgba(127,140,141,0.15);color:#95a5a6}
 .observations{background:#1a2733;border-radius:12px;padding:20px;border:1px solid #2c3e50;margin-bottom:30px}
 .observations li{margin:8px 0;padding-left:10px;color:#bdc3c7}
-.chart-container{margin:15px 0}
-.mini-chart{width:100%;height:80px;background:#0a1219;border-radius:6px}
 table{width:100%;border-collapse:collapse;margin:10px 0}
 th,td{padding:8px 12px;text-align:center;border-bottom:1px solid #2c3e50;font-size:0.9em}
 th{color:#7f8c8d;font-weight:normal}
 .footer{text-align:center;padding:20px;color:#7f8c8d;font-size:0.85em}
 a{color:#3498db}
+.alert-banner{background:linear-gradient(135deg,#e74c3c33,#e67e2233);border:1px solid #e74c3c66;border-radius:12px;padding:15px 20px;margin-bottom:20px;text-align:center}
+.alert-banner h3{color:#e74c3c;margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -44,7 +42,13 @@ a{color:#3498db}
 
 <div class="header">
 <h1>📊 A股市场全景监测</h1>
-<div class="date">2026-07-14 | 生成时间: 2026-07-14 21:48 CST</div>
+<div class="date">2026-07-19 | 生成时间: 2026-07-19 22:13 CST</div>
+</div>
+
+<!-- 暴跌警告条 -->
+<div class="alert-banner">
+<h3>🚨 本周市场遭遇年内最大单周暴跌</h3>
+<p style="color:#e67e22">国证A指周跌8.66%，中证500周跌11.64%，沪深300周跌5.26%。仅红利ETF逆势收红+2.26%。</p>
 </div>
 
 <!-- 指数表现 -->
@@ -56,75 +60,81 @@ a{color:#3498db}
 <tr>
   <td>沪深300</td>
   <td>4781</td>
-  <td>4695</td>
-  <td class="down">-1.79%</td>
+  <td>4529</td>
+  <td style="color:#27ae60">-5.26%</td>
 </tr>
 <tr>
   <td>中证500</td>
-  <td>7968</td>
-  <td>8138</td>
-  <td class="up">+2.13%</td>
+  <td>8504</td>
+  <td>7514</td>
+  <td style="color:#27ae60">-11.64%</td>
 </tr>
 <tr>
   <td>国证A指</td>
-  <td>7271</td>
-  <td>7012</td>
-  <td class="down">-3.57%</td>
+  <td>7261</td>
+  <td>6632</td>
+  <td style="color:#27ae60">-8.66%</td>
 </tr>
 <tr>
   <td>中证红利ETF</td>
   <td>1.460</td>
-  <td>1.467</td>
-  <td class="up">+0.48%</td>
+  <td>1.493</td>
+  <td style="color:#e74c3c">+2.26%</td>
 </tr>
 <tr>
   <td>300价值ETF</td>
   <td>1.266</td>
-  <td>1.271</td>
-  <td class="up">+0.39%</td>
+  <td>1.228</td>
+  <td style="color:#27ae60">-3.0%</td>
 </tr>
 <tr>
   <td>300成长ETF</td>
   <td>1.291</td>
-  <td>1.260</td>
-  <td class="down">-2.4%</td>
+  <td>1.151</td>
+  <td style="color:#27ae60">-10.84%</td>
 </tr>
 </table>
 <div style="margin-top:10px">
-  <span class="tag tag-down">沪深300 周跌幅 -1.79%</span>
-  
-  <span class="tag tag-down">A股全指 周跌幅 -3.57%</span>
-  <span class="tag tag-up">红利ETF 周涨幅 +0.48%</span>
+  <span class="tag tag-down">沪深300 周跌5.26%</span>
+  <span class="tag tag-down">中证500 周跌11.64%</span>
+  <span class="tag tag-down">A股全指 周跌8.66%</span>
+  <span class="tag tag-up">红利ETF 逆势涨+2.26%</span>
 </div>
 </div>
 
 <!-- 关键信号 -->
-<div class="card signal-card good">
+<div class="card signal-card warn">
 <h2>🎯 五年之锚偏离度</h2>
-<div class="stat-row"><span class="stat-label">当前点位</span><span class="stat-value">7012</span></div>
-<div class="stat-row"><span class="stat-label">锚定点位(600MA)</span><span class="stat-value">7050</span></div>
-<div class="stat-row"><span class="stat-label">偏离度</span><span class="stat-value down">+-0.55%</span></div>
-<div class="stat-row"><span class="stat-label">信号</span><span class="stat-value" style="color:#27ae60">正常</span></div>
+<div class="stat-row"><span class="stat-label">当前点位</span><span class="stat-value">6632</span></div>
+<div class="stat-row"><span class="stat-label">锚定点位(600MA)</span><span class="stat-value">6950</span></div>
+<div class="stat-row"><span class="stat-label">偏离度</span><span class="stat-value" style="color:#27ae60">-4.58%</span></div>
+<div class="stat-row"><span class="stat-label">信号</span><span class="stat-value" style="color:#e67e22">正常</span></div>
+<div style="margin-top:8px;font-size:0.85em;color:#7f8c8d">
+⚠️ 国证A指已跌破600MA锚定线，为近半年首次
+</div>
 </div>
 
 <!-- 股债性价比 -->
-<div class="card signal-card ">
+<div class="card signal-card">
 <h2>⚖️ 股债性价比</h2>
-<div class="stat-row"><span class="stat-label">沪深300盈利收益率 (E/P)</span><span class="stat-value">7.02%</span></div>
-<div class="stat-row"><span class="stat-label">美国10年期国债</span><span class="stat-value">4.62%</span></div>
-<div class="stat-row"><span class="stat-label">股债利差</span><span class="stat-value ">2.4%</span></div>
+<div class="stat-row"><span class="stat-label">沪深300盈利收益率 (E/P)</span><span class="stat-value">7.41%</span></div>
+<div class="stat-row"><span class="stat-label">美国10年期国债</span><span class="stat-value">4.56%</span></div>
+<div class="stat-row"><span class="stat-label">股债利差</span><span class="stat-value" style="color:#e67e22">2.85%</span></div>
 <div class="stat-row"><span class="stat-label" style="font-weight:bold">结论</span><span class="stat-value" style="color:#e67e22">中性</span></div>
+<div style="margin-top:8px;font-size:0.85em;color:#7f8c8d">
+E/P vs 美10Y利差2.85%，股票相对债券吸引力中性偏低。A股下跌正在改善性价比。
+</div>
 </div>
 
 <!-- 美债收益率 -->
 <div class="card">
-<h2>🇺🇸 美债收益率 (2026-07-13)</h2>
-<div class="stat-row"><span class="stat-label">2年期</span><span class="stat-value">4.26%</span></div>
-<div class="stat-row"><span class="stat-label">10年期</span><span class="stat-value" style="font-size:1.2em;color:#3498db">4.62%</span></div>
-<div class="stat-row"><span class="stat-label">30年期</span><span class="stat-value">5.1%</span></div>
-<div class="stat-row"><span class="stat-label">2s10s利差</span><span class="stat-value up">0.36%</span></div>
+<h2>🇺🇸 美债收益率 (2026-07-10)</h2>
+<div class="stat-row"><span class="stat-label">2年期</span><span class="stat-value">4.21%</span></div>
+<div class="stat-row"><span class="stat-label">10年期</span><span class="stat-value" style="font-size:1.2em;color:#3498db">4.56%</span></div>
+<div class="stat-row"><span class="stat-label">30年期</span><span class="stat-value">5.06%</span></div>
+<div class="stat-row"><span class="stat-label">2s10s利差</span><span class="stat-value" style="color:#e74c3c">0.35%</span></div>
 <div style="margin-top:8px;font-size:0.85em;color:#7f8c8d">
-10Y环比+18bp，30Y环比+19bp，收益率曲线上移
+⚠️ FRED API被墙，美债数据截至2026-07-10。10Y=4.56%，2s10s=0.35%维持正值。
 </div>
 </div>
 
@@ -132,26 +142,26 @@ a{color:#3498db}
 <div class="card">
 <h2>📊 估值概览</h2>
 <table>
-<tr><th>指标</th><th>沪深300</th><th>中证红利ETF</th></tr>
-<tr><td>PE(TTM)</td><td style="color:#27ae60">14.25</td><td style="color:#e67e22">17.52</td></tr>
-<tr><td>PE(LYR)</td><td style="color:#e74c3c">59.41</td><td>-</td></tr>
-<tr><td>PB(LF)</td><td>1.27</td><td>-</td></tr>
-<tr><td>股息率</td><td style="color:#27ae60">1.08%</td><td style="color:#27ae60">4.85%</td></tr>
+<tr><th>指标</th><th>沪深300</th><th>中证红利</th></tr>
+<tr><td>PE(TTM)</td><td style="color:#27ae60">13.5</td><td>~7.5</td></tr>
+<tr><td>PE(LYR)</td><td style="color:#e74c3c">63.89</td><td>-</td></tr>
+<tr><td>PB(LF)</td><td>8.63</td><td>-</td></tr>
+<tr><td>股息率</td><td style="color:#27ae60">2.8%</td><td style="color:#27ae60">4.63%</td></tr>
 </table>
-<div style="margin-top:10px"><span class="tag tag-neutral">PE(TTM)=13.72历史偏低 | PE(LYR)=59.41因2025盈利基数低失真</span></div>
-<div style="margin-top:5px"><span class="tag tag-down">股息率2.95%处于历史较高水平</span></div>
+<div style="margin-top:10px"><span class="tag tag-neutral">PE(LYR)=63.89因2025盈利基数低失真 | PE(TTM)~13.5处历史中低位</span></div>
+<div style="margin-top:5px"><span class="tag tag-up">中证红利股息率4.63%处于历史高位</span></div>
 </div>
 
 <!-- 风格轮动 -->
 <div class="card signal-card">
 <h2>🔄 风格轮动</h2>
-<div class="stat-row"><span class="stat-label">300价值ETF 周涨跌</span><span class="stat-value up">+0.39%</span></div>
-<div class="stat-row"><span class="stat-label">300成长ETF 周涨跌</span><span class="stat-value down">-2.4%</span></div>
-<div class="stat-row"><span class="stat-label">价值-成长利差</span><span class="stat-value up">+2.79%</span></div>
+<div class="stat-row"><span class="stat-label">300价值ETF 周涨跌</span><span class="stat-value" style="color:#27ae60">-3.0%</span></div>
+<div class="stat-row"><span class="stat-label">300成长ETF 周涨跌</span><span class="stat-value" style="color:#27ae60">-10.84%</span></div>
+<div class="stat-row"><span class="stat-label">价值-成长利差</span><span class="stat-value" style="color:#e74c3c">+7.84%</span></div>
 <div class="stat-row"><span class="stat-label">信号</span><span class="stat-value" style="color:#27ae60">价值偏强</span></div>
 <div style="margin-top:10px;font-size:0.85em;color:#7f8c8d">
-本周价值微涨成长大跌，价值风格显著偏强（利差+2.79%）。<br>
-美债10Y升至4.56%高位，高估值成长股承压，价值防御逻辑强化。
+本周暴跌中价值显著优于成长（利差+7.84%）。<br>
+美债高位+去杠杆环境下，低估值高股息策略防御性突出。
 </div>
 </div>
 </div>
@@ -160,7 +170,7 @@ a{color:#3498db}
 <div class="observations">
 <h2 style="color:#3498db;margin-bottom:15px">💡 本周关键观察</h2>
 <ol>
-<li>本周沪深300下跌1.79%，中证500上涨+2.13%，国证A指下跌3.57%，市场分化明显</li><li>国证A指偏离五年锚-0.55%，处于正常区域</li><li>股债性价比: E/P(TTM)=7.02% vs 美10Y=4.62%，利差=2.4%，中性</li><li>中证红利ETF上涨+0.48%，防御价值延续</li><li>风格轮动: 价值ETF周涨跌0.39%，成长ETF周涨跌-2.4%，价值偏强</li><li>美债10Y=4.62%（环比+0.0600000000000005bp至4.62%），2Y=4.26%，2s10s=0.36%</li>
+<li>⚠️ 本周市场暴跌：沪深300 -5.26%，中证500 -11.64%，国证A指 -8.66%，为年内最大单周跌幅</li><li>国证A指偏离五年锚-4.58%，已回落至正常区域，击穿600MA(≈6950)</li><li>股债性价比: E/P(TTM)=7.41% vs 美10Y=4.56%，利差=2.85%，中性</li><li>🛡️ 中证红利ETF逆势上涨+2.26%，高股息防御价值凸显</li><li>风格轮动: 价值ETF周涨跌-3.0%，成长ETF周涨跌-10.84%，价值偏强，成长股遭重创</li><li>美债10Y=4.56%（此前+7bp至4.56%），2Y=4.21%，2s10s=0.35%</li>
 </ol>
 </div>
 
@@ -168,19 +178,20 @@ a{color:#3498db}
 <div class="observations" style="border-left:4px solid #e67e22">
 <h2 style="color:#e67e22;margin-bottom:10px">⚠️ 风险提示</h2>
 <ul style="font-size:0.9em;color:#bdc3c3">
-<li>沪深300 TTM PE 13.72处历史中低位，但LYR PE高达59.41因2025盈利基数低</li>
-<li>美债10Y从4.38%快速攀升至4.56%（+18bp），对全球估值体系构成压力</li>
-<li>沪深300本周下跌1.79%，中证500下跌2.13%，市场普跌</li>
-<li>中证红利ETF逆势上涨+0.48%，高股息防御价值凸显</li>
-<li>300成长ETF大跌2.4%，高估值成长标的需警惕利率上行风险</li>
-<li>2s10s利差0.36%，收益率曲线陡峭化</li>
-<li>本报告仅为市场观察，不构成投资建议</li>
+<li>🆘 本周为年内最大单周跌幅，国证A指跌破600MA五年之锚</li>
+<li>沪深300 PE(TTM)~13.5处历史中低位，但LYR 63.89因盈利基数失真——需等2026中报验证</li>
+<li>中证500周跌11.64%，中小盘流动性冲击显著，警惕杠杆资金踩踏</li>
+<li>唯有中证红利ETF逆势上涨+2.26%，高股息成为唯一避风港</li>
+<li>美债10Y=4.56%，利率高位维持，全球高估值资产面临持续去泡沫压力</li>
+<li>300成长ETF估算暴跌10.84%，高估值成长标的需高度警惕</li>
+<li>2s10s利差0.35%维持正值，收益率曲线正常化</li>
+<li>📢 本报告仅为市场观察，不构成投资建议。历史规律不预示未来。</li>
 </ul>
 </div>
 
 <div class="footer">
-<p>数据来源: TDX通达信 · FRED · 中证指数公司</p>
-<p>报告生成: 自动化系统 | 下次更新: 2026-07-14</p>
+<p>数据来源: TDX通达信 · FRED(截至07-10) · 中证指数公司</p>
+<p>报告生成: 自动化系统 | 下次更新: 2026-07-20</p>
 <p><a href="https://raistlin1314-byte.github.io/A_share_market_monitor/" target="_blank">GitHub Pages</a></p>
 </div>
 
